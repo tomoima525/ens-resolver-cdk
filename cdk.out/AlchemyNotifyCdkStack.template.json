@@ -1,0 +1,165 @@
+{
+ "Resources": {
+  "AppRunnerServiceAccessRole32365254": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "build.apprunner.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AlchemyNotifyCdkStack/AppRunner/Service/AccessRole/Resource"
+   }
+  },
+  "AppRunnerServiceAccessRoleDefaultPolicy6323D71B": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "ecr:GetAuthorizationToken",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:BatchGetImage",
+        "ecr:GetDownloadUrlForLayer"
+       ],
+       "Effect": "Allow",
+       "Resource": "arn:aws:ecr:us-west-2:101567964829:repository/cdk-hnb659fds-container-assets-101567964829-us-west-2"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "AppRunnerServiceAccessRoleDefaultPolicy6323D71B",
+    "Roles": [
+     {
+      "Ref": "AppRunnerServiceAccessRole32365254"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "AlchemyNotifyCdkStack/AppRunner/Service/AccessRole/DefaultPolicy/Resource"
+   }
+  },
+  "AppRunnerService76348B8C": {
+   "Type": "AWS::AppRunner::Service",
+   "Properties": {
+    "SourceConfiguration": {
+     "AuthenticationConfiguration": {
+      "AccessRoleArn": {
+       "Fn::GetAtt": [
+        "AppRunnerServiceAccessRole32365254",
+        "Arn"
+       ]
+      }
+     },
+     "ImageRepository": {
+      "ImageConfiguration": {
+       "Port": "80",
+       "RuntimeEnvironmentVariables": [
+        {
+         "Name": "ALCHEMY_TOKEN",
+         "Value": "8Jmv6cTD7I_12tS7Dzy3DxgK9JEqoM1t"
+        }
+       ]
+      },
+      "ImageIdentifier": {
+       "Fn::Sub": "101567964829.dkr.ecr.us-west-2.${AWS::URLSuffix}/cdk-hnb659fds-container-assets-101567964829-us-west-2:4db5c2a2eb703594f2ec2bc796c062468eafeaad42283f4c80203373271b70ed"
+      },
+      "ImageRepositoryType": "ECR"
+     }
+    },
+    "InstanceConfiguration": {},
+    "NetworkConfiguration": {
+     "EgressConfiguration": {
+      "EgressType": "DEFAULT"
+     }
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "AlchemyNotifyCdkStack/AppRunner/Service/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/z2OyQ7CMAxEv4V7aijbme3CCVQ+AJlgirskUZyCUMW/kxTEaezx6Hmm0C8mMBnhUzJ9rbOGL9CfAupaRevck/ZnFKEgsLO6Jr9vsaR1clS8QUHOCgfrXxsUUowt9IVtSG1vZtCjbVi/0vqd3gqd850x5CGaJ/IP1vRWAzI+LtmUKX3oguvCgCGxnU+ZWQ55ho27Y2y8+lUeJ/0zf+c/1tgrQSXjR76EfA7TUSXMWcwGbgmKr34AvbJMyQUBAAA="
+   },
+   "Metadata": {
+    "aws:cdk:path": "AlchemyNotifyCdkStack/CDKMetadata/Default"
+   }
+  }
+ },
+ "Outputs": {
+  "AppRunnerAppRunnerServiceARN144EBB7F": {
+   "Value": {
+    "Fn::GetAtt": [
+     "AppRunnerService76348B8C",
+     "ServiceArn"
+    ]
+   }
+  },
+  "AppRunnerAppRunnerServiceURLEEB15809": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Fn::GetAtt": [
+        "AppRunnerService76348B8C",
+        "ServiceUrl"
+       ]
+      }
+     ]
+    ]
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

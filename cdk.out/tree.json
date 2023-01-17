@@ -1,0 +1,238 @@
+{
+  "version": "tree-0.1",
+  "tree": {
+    "id": "App",
+    "path": "",
+    "children": {
+      "Tree": {
+        "id": "Tree",
+        "path": "Tree",
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.222"
+        }
+      },
+      "AlchemyNotifyCdkStack": {
+        "id": "AlchemyNotifyCdkStack",
+        "path": "AlchemyNotifyCdkStack",
+        "children": {
+          "AppRunner": {
+            "id": "AppRunner",
+            "path": "AlchemyNotifyCdkStack/AppRunner",
+            "children": {
+              "ImageAssets": {
+                "id": "ImageAssets",
+                "path": "AlchemyNotifyCdkStack/AppRunner/ImageAssets",
+                "children": {
+                  "Staging": {
+                    "id": "Staging",
+                    "path": "AlchemyNotifyCdkStack/AppRunner/ImageAssets/Staging",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.AssetStaging",
+                      "version": "2.50.0"
+                    }
+                  },
+                  "Repository": {
+                    "id": "Repository",
+                    "path": "AlchemyNotifyCdkStack/AppRunner/ImageAssets/Repository",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_ecr.RepositoryBase",
+                      "version": "2.50.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_ecr_assets.DockerImageAsset",
+                  "version": "2.50.0"
+                }
+              },
+              "Service": {
+                "id": "Service",
+                "path": "AlchemyNotifyCdkStack/AppRunner/Service",
+                "children": {
+                  "AccessRole": {
+                    "id": "AccessRole",
+                    "path": "AlchemyNotifyCdkStack/AppRunner/Service/AccessRole",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "AlchemyNotifyCdkStack/AppRunner/Service/AccessRole/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                          "aws:cdk:cloudformation:props": {
+                            "assumeRolePolicyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": "sts:AssumeRole",
+                                  "Effect": "Allow",
+                                  "Principal": {
+                                    "Service": "build.apprunner.amazonaws.com"
+                                  }
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                          "version": "2.50.0"
+                        }
+                      },
+                      "DefaultPolicy": {
+                        "id": "DefaultPolicy",
+                        "path": "AlchemyNotifyCdkStack/AppRunner/Service/AccessRole/DefaultPolicy",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "AlchemyNotifyCdkStack/AppRunner/Service/AccessRole/DefaultPolicy/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                              "aws:cdk:cloudformation:props": {
+                                "policyDocument": {
+                                  "Statement": [
+                                    {
+                                      "Action": "ecr:GetAuthorizationToken",
+                                      "Effect": "Allow",
+                                      "Resource": "*"
+                                    },
+                                    {
+                                      "Action": [
+                                        "ecr:BatchCheckLayerAvailability",
+                                        "ecr:BatchGetImage",
+                                        "ecr:GetDownloadUrlForLayer"
+                                      ],
+                                      "Effect": "Allow",
+                                      "Resource": "arn:aws:ecr:us-west-2:101567964829:repository/cdk-hnb659fds-container-assets-101567964829-us-west-2"
+                                    }
+                                  ],
+                                  "Version": "2012-10-17"
+                                },
+                                "policyName": "AppRunnerServiceAccessRoleDefaultPolicy6323D71B",
+                                "roles": [
+                                  {
+                                    "Ref": "AppRunnerServiceAccessRole32365254"
+                                  }
+                                ]
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                              "version": "2.50.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.Policy",
+                          "version": "2.50.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Role",
+                      "version": "2.50.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "AlchemyNotifyCdkStack/AppRunner/Service/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::AppRunner::Service",
+                      "aws:cdk:cloudformation:props": {
+                        "sourceConfiguration": {
+                          "authenticationConfiguration": {
+                            "accessRoleArn": {
+                              "Fn::GetAtt": [
+                                "AppRunnerServiceAccessRole32365254",
+                                "Arn"
+                              ]
+                            }
+                          },
+                          "imageRepository": {
+                            "imageConfiguration": {
+                              "port": "80",
+                              "runtimeEnvironmentVariables": [
+                                {
+                                  "name": "ALCHEMY_TOKEN",
+                                  "value": "8Jmv6cTD7I_12tS7Dzy3DxgK9JEqoM1t"
+                                }
+                              ]
+                            },
+                            "imageIdentifier": {
+                              "Fn::Sub": "101567964829.dkr.ecr.us-west-2.${AWS::URLSuffix}/cdk-hnb659fds-container-assets-101567964829-us-west-2:4db5c2a2eb703594f2ec2bc796c062468eafeaad42283f4c80203373271b70ed"
+                            },
+                            "imageRepositoryType": "ECR"
+                          }
+                        },
+                        "instanceConfiguration": {},
+                        "networkConfiguration": {
+                          "egressConfiguration": {
+                            "egressType": "DEFAULT"
+                          }
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_apprunner.CfnService",
+                      "version": "2.50.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "@aws-cdk/aws-apprunner-alpha.Service",
+                  "version": "2.31.1-alpha.0"
+                }
+              },
+              "AppRunnerServiceARN": {
+                "id": "AppRunnerServiceARN",
+                "path": "AlchemyNotifyCdkStack/AppRunner/AppRunnerServiceARN",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.50.0"
+                }
+              },
+              "AppRunnerServiceURL": {
+                "id": "AppRunnerServiceURL",
+                "path": "AlchemyNotifyCdkStack/AppRunner/AppRunnerServiceURL",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnOutput",
+                  "version": "2.50.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.1.222"
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "AlchemyNotifyCdkStack/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "AlchemyNotifyCdkStack/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.50.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.1.222"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "aws-cdk-lib.Stack",
+          "version": "2.50.0"
+        }
+      }
+    },
+    "constructInfo": {
+      "fqn": "aws-cdk-lib.App",
+      "version": "2.50.0"
+    }
+  }
+}

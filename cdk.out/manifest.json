@@ -1,0 +1,94 @@
+{
+  "version": "21.0.0",
+  "artifacts": {
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    },
+    "AlchemyNotifyCdkStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "AlchemyNotifyCdkStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "AlchemyNotifyCdkStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://101567964829/us-west-2",
+      "properties": {
+        "templateFile": "AlchemyNotifyCdkStack.template.json",
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::101567964829:role/cdk-hnb659fds-deploy-role-101567964829-us-west-2",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::101567964829:role/cdk-hnb659fds-cfn-exec-role-101567964829-us-west-2",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-101567964829-us-west-2/8a117874eb8bb7644341f77397f56683461b009faabb2666576f11c2d0d97b7d.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "AlchemyNotifyCdkStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::101567964829:role/cdk-hnb659fds-lookup-role-101567964829-us-west-2",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "AlchemyNotifyCdkStack.assets"
+      ],
+      "metadata": {
+        "/AlchemyNotifyCdkStack/AppRunner/Service/AccessRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AppRunnerServiceAccessRole32365254"
+          }
+        ],
+        "/AlchemyNotifyCdkStack/AppRunner/Service/AccessRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AppRunnerServiceAccessRoleDefaultPolicy6323D71B"
+          }
+        ],
+        "/AlchemyNotifyCdkStack/AppRunner/Service/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AppRunnerService76348B8C"
+          }
+        ],
+        "/AlchemyNotifyCdkStack/AppRunner/AppRunnerServiceARN": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AppRunnerAppRunnerServiceARN144EBB7F"
+          }
+        ],
+        "/AlchemyNotifyCdkStack/AppRunner/AppRunnerServiceURL": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AppRunnerAppRunnerServiceURLEEB15809"
+          }
+        ],
+        "/AlchemyNotifyCdkStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/AlchemyNotifyCdkStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/AlchemyNotifyCdkStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "AlchemyNotifyCdkStack"
+    }
+  }
+}
